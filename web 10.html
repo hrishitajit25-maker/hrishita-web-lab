@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iframe Demo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .menu {
+            width: 30%;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+        .menu a {
+            display: block;
+            margin: 10px 0;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+        .menu a:hover {
+            color: blue;
+        }
+        .content {
+            width: 70%;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Left Menu -->
+    <div class="menu">
+        <h3>Menu</h3>
+        <a href="https://www.wikipedia.org" target="frame">Open Wikipedia</a>
+        <a href="https://www.google.com/maps?q=Nagpur&output=embed" target="frame">Open Map</a>
+    </div>
+
+    <!-- Right Content -->
+    <div class="content">
+        <iframe name="frame" src="about:blank"></iframe>
+    </div>
+
+</div>
+
+</body>
+</html>
