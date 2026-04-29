@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Sports Tournament</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0f172a;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    h2 {
+      color: #facc15;
+      margin-top: 20px;
+    }
+
+    h3 {
+      color: #a5f3fc;
+    }
+
+    p {
+      text-align: center;
+      font-size: 18px;
+    }
+
+    hr {
+      border: 1px solid #334155;
+      margin: 20px 0;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+    }
+
+    form {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    input[type="submit"] {
+      background-color: #38bdf8;
+      color: black;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0ea5e9;
+    }
+
+    .success {
+      text-align: center;
+      color: #4ade80;
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Ultimate E-Sports Championship 2026</h1>
+  <p>Compete. Conquer. Win Big.</p>
+
+  <hr>
+
+  <h2>Tournament Rules</h2>
+  <ul>
+    <li>All players must register before the deadline.</li>
+    <li>Each team must have exactly 5 members.</li>
+    <li>No cheating, hacking, or exploiting bugs.</li>
+    <li>Respect opponents and organizers.</li>
+    <li>Organizer decisions are final.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Prize Pool Breakdown</h2>
+  <ol>
+    <li>1st Place - $5000</li>
+    <li>2nd Place - $2500</li>
+    <li>3rd Place - $1000</li>
+    <li>MVP Award - $500</li>
+  </ol>
+
+  <hr>
+
+  <h2>Team Registration Form</h2>
+  <form id="registrationForm">
+    
+    <label>Team Name:</label>
+    <input type="text" name="team_name" required>
+
+    <h3>Player 1</h3>
+    <label>Name:</label>
+    <input type="text" required>
+    <label>Email:</label>
+    <input type="email" required>
+
+    <h3>Player 2</h3>
+    <label>Name:</label>
+    <input type="text" required>
+    <label>Email:</label>
+    <input type="email" required>
+
+    <h3>Player 3</h3>
+    <label>Name:</label>
+    <input type="text" required>
+    <label>Email:</label>
+    <input type="email" required>
+
+    <h3>Player 4</h3>
+    <label>Name:</label>
+    <input type="text" required>
+    <label>Email:</label>
+    <input type="email" required>
+
+    <h3>Player 5</h3>
+    <label>Name:</label>
+    <input type="text" required>
+    <label>Email:</label>
+    <input type="email" required>
+
+    <input type="submit" value="Register Team">
+
+    <div class="success" id="successMessage">✅ Team Registered Successfully!</div>
+
+  </form>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+    const message = document.getElementById('successMessage');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      message.style.display = 'block';
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>
