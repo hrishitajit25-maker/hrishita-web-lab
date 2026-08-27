@@ -1,0 +1,2412 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerGuide AI</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                navy: "#070b17",
+                card: "#10172a",
+                gold: "#facc15",
+                purple: "#8b5cf6"
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    margin:0;
+    font-family:Inter,Arial,sans-serif;
+    background:#070b17;
+    color:#f8fafc;
+}
+
+.bg-grid {
+    background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:40px 40px;
+}
+
+.glass {
+    background:rgba(15,23,42,.72);
+    border:1px solid rgba(255,255,255,.09);
+    backdrop-filter:blur(15px);
+    box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.gradient-text {
+    background:linear-gradient(90deg,#fde68a,#facc15,#a78bfa);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.fade {
+    animation:fade .35s ease;
+}
+
+@keyframes fade {
+    from {
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+::-webkit-scrollbar {
+    width:7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background:#374151;
+    border-radius:10px;
+}
+
+.option {
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    padding:14px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover {
+    background:rgba(255,255,255,.08);
+}
+
+.option.active {
+    border-color:#facc15;
+    background:rgba(250,204,21,.1);
+}
+
+.progress {
+    height:8px;
+    background:#1e293b;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress div {
+    height:100%;
+    background:linear-gradient(90deg,#facc15,#8b5cf6);
+}
+
+</style>
+</head>
+
+<body class="bg-grid">
+
+<div id="app"></div>
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const INTERESTS = [
+    "Coding",
+    "Artificial Intelligence",
+    "Data",
+    "Design",
+    "Business",
+    "Cybersecurity",
+    "Electronics",
+    "Communication",
+    "Problem Solving"
+];
+
+const SKILLS = [
+    "Python",
+    "Java",
+    "C/C++",
+    "HTML/CSS",
+    "JavaScript",
+    "SQL",
+    "Git/GitHub",
+    "Machine Learning",
+    "UI/UX",
+    "Communication"
+];
+
+const GOALS = [
+    "Software Development",
+    "AI/ML",
+    "Data Science",
+    "Cybersecurity",
+    "UI/UX",
+    "Cloud/DevOps",
+    "Product Management",
+    "Research",
+    "Entrepreneurship",
+    "Not sure"
+];
+
+const careers = [
+
+{
+id:"software",
+name:"Software Developer",
+icon:"💻",
+difficulty:"Moderate",
+interests:["Coding","Problem Solving","Communication"],
+skills:["Python","Java","C/C++","HTML/CSS","JavaScript","SQL","Git/GitHub"],
+goals:["Software Development","Research","Entrepreneurship"],
+projects:[
+"Task Management Web App",
+"E-commerce API",
+"Campus Event Portal"
+],
+roadmap:[
+["Foundations",["Programming Fundamentals","Git/GitHub"],"3 weeks","Learn programming basics and version control.","Build a CLI Task Manager"],
+["Web Development",["HTML/CSS","JavaScript"],"5 weeks","Build responsive web applications.","Create a Student Dashboard"],
+["Backend",["REST APIs","SQL","Authentication"],"5 weeks","Learn backend development.","Build a Notes API"],
+["Projects",["Testing","Deployment","GitHub"],"4 weeks","Create portfolio projects.","Deploy a Full Stack App"],
+["Career Preparation",["DSA","Resume","Interview"],"3 weeks","Prepare for internships and jobs.","Create Developer Portfolio"]
+]
+},
+
+{
+id:"aiml",
+name:"AI/ML Engineer",
+icon:"🤖",
+difficulty:"Advanced",
+interests:["Artificial Intelligence","Coding","Data","Problem Solving"],
+skills:["Python","SQL","Machine Learning","Git/GitHub"],
+goals:["AI/ML","Research","Data Science"],
+projects:[
+"Student Performance Predictor",
+"Resume Skill Analyzer",
+"Recommendation Engine"
+],
+roadmap:[
+["Foundations",["Python","NumPy","Pandas"],"4 weeks","Learn Python and data manipulation.","Analyze a Student Dataset"],
+["Mathematics & Statistics",["Statistics","Probability","Linear Algebra"],"5 weeks","Understand mathematical foundations.","Create Statistical Analysis"],
+["Machine Learning",["Regression","Classification","Evaluation"],"6 weeks","Train machine learning models.","Build Student Performance Predictor"],
+["Deep Learning",["Neural Networks","CNNs"],"6 weeks","Learn modern neural networks.","Create Image Classifier"],
+["Projects",["APIs","Model Deployment"],"5 weeks","Deploy AI models.","Deploy ML Prediction API"],
+["Career Preparation",["Resume","GitHub","Interview"],"3 weeks","Prepare for AI roles.","Publish AI Portfolio"]
+]
+},
+
+{
+id:"data",
+name:"Data Scientist",
+icon:"📊",
+difficulty:"Advanced",
+interests:["Data","Problem Solving","Artificial Intelligence","Coding"],
+skills:["Python","SQL","Machine Learning","Git/GitHub"],
+goals:["Data Science","AI/ML","Research"],
+projects:[
+"Student Performance Predictor",
+"Customer Churn Analyzer",
+"Sales Forecasting Dashboard"
+],
+roadmap:[
+["Python Foundations",["Python","Pandas","SQL"],"4 weeks","Work with real datasets.","Explore a Public Dataset"],
+["Statistics",["Statistics","Probability","Visualization"],"5 weeks","Understand statistical reasoning.","Build EDA Report"],
+["Machine Learning",["Regression","Classification","Metrics"],"6 weeks","Build predictive models.","Predict Customer Churn"],
+["Analytics Projects",["Visualization","Storytelling"],"5 weeks","Communicate data insights.","Build Analytics Dashboard"],
+["Career Preparation",["Portfolio","Resume","Interview"],"3 weeks","Prepare for data roles.","Publish Case Studies"]
+]
+},
+
+{
+id:"analyst",
+name:"Data Analyst",
+icon:"📈",
+difficulty:"Moderate",
+interests:["Data","Problem Solving","Business","Communication"],
+skills:["Python","SQL","Communication"],
+goals:["Data Science","Product Management","Not sure"],
+projects:[
+"College Analytics Dashboard",
+"Sales Insights Report",
+"Placement Data Explorer"
+],
+roadmap:[
+["Foundations",["Excel","SQL","Data Cleaning"],"4 weeks","Learn data preparation.","Clean College Dataset"],
+["Python Analytics",["Pandas","Matplotlib"],"4 weeks","Perform exploratory analysis.","Create EDA Notebook"],
+["Visualization",["Dashboards","Storytelling"],"4 weeks","Present useful insights.","Build Placement Dashboard"],
+["Portfolio",["Case Studies","Presentation"],"3 weeks","Create portfolio evidence.","Publish Analytics Projects"]
+]
+},
+
+{
+id:"cyber",
+name:"Cybersecurity Analyst",
+icon:"🛡️",
+difficulty:"Advanced",
+interests:["Cybersecurity","Coding","Problem Solving","Electronics"],
+skills:["Python","C/C++","SQL","Git/GitHub"],
+goals:["Cybersecurity","Research"],
+projects:[
+"Security Log Analyzer",
+"Password Strength Checker",
+"Network Monitoring Dashboard"
+],
+roadmap:[
+["Foundations",["Networking","Linux","Python"],"5 weeks","Understand networks and systems.","Create Network Monitor"],
+["Security Basics",["Authentication","Web Security"],"5 weeks","Understand common security risks.","Build Security Checklist"],
+["Defensive Security",["Logs","Incident Response"],"5 weeks","Analyze security events.","Build Log Analyzer"],
+["Career Preparation",["Labs","Portfolio","Interview"],"4 weeks","Build security experience.","Document Security Labs"]
+]
+},
+
+{
+id:"uiux",
+name:"UI/UX Designer",
+icon:"🎨",
+difficulty:"Moderate",
+interests:["Design","Communication","Problem Solving","Business"],
+skills:["UI/UX","HTML/CSS","Communication"],
+goals:["UI/UX","Product Management","Entrepreneurship"],
+projects:[
+"Student App Redesign",
+"Career Dashboard UX",
+"Mobile Banking Prototype"
+],
+roadmap:[
+["Design Foundations",["Design Principles","User Research"],"3 weeks","Understand users and visual hierarchy.","Redesign College Portal"],
+["UX Process",["Personas","User Flows","Wireframes"],"4 weeks","Convert problems into designs.","Prototype Student App"],
+["UI Systems",["Typography","Color","Design Systems"],"4 weeks","Create consistent interfaces.","Build Design System"],
+["Portfolio",["Case Studies","Prototypes"],"3 weeks","Present design decisions.","Publish UX Case Studies"]
+]
+},
+
+{
+id:"cloud",
+name:"Cloud/DevOps Engineer",
+icon:"☁️",
+difficulty:"Advanced",
+interests:["Coding","Problem Solving","Electronics"],
+skills:["Python","C/C++","Git/GitHub","SQL"],
+goals:["Cloud/DevOps","Software Development"],
+projects:[
+"CI/CD Pipeline Demo",
+"Containerized Web App",
+"Cloud Monitoring Dashboard"
+],
+roadmap:[
+["Foundations",["Linux","Git","Networking"],"4 weeks","Learn infrastructure basics.","Automate Scripts"],
+["Containers",["Docker","Containers"],"4 weeks","Package applications.","Containerize Web App"],
+["CI/CD",["Pipelines","Testing","Deployment"],"5 weeks","Automate deployment.","Create CI/CD Pipeline"],
+["Cloud",["Cloud Basics","Monitoring"],"5 weeks","Deploy applications.","Deploy Cloud Application"]
+]
+},
+
+{
+id:"product",
+name:"Product Manager",
+icon:"🚀",
+difficulty:"Moderate",
+interests:["Business","Communication","Problem Solving","Design"],
+skills:["Communication","UI/UX","SQL","Git/GitHub"],
+goals:["Product Management","Entrepreneurship"],
+projects:[
+"Campus Product Case Study",
+"Feature Prioritization Tool",
+"Student App Product Plan"
+],
+roadmap:[
+["Product Basics",["User Research","Problem Framing"],"3 weeks","Understand user problems.","Campus Product Case"],
+["Strategy",["Roadmaps","Prioritization","Metrics"],"4 weeks","Learn product strategy.","Create Product Roadmap"],
+["Execution",["Agile","Communication","Analytics"],"5 weeks","Work with development teams.","Run Mock Sprint"],
+["Portfolio",["Case Studies","Presentations"],"3 weeks","Show product thinking.","Publish Product Case Studies"]
+]
+}
+
+];
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadProfile(){
+    return JSON.parse(localStorage.getItem("careerProfile") || "null");
+}
+
+function saveProfile(profile){
+    localStorage.setItem("careerProfile",JSON.stringify(profile));
+}
+
+function loadProgress(){
+    return JSON.parse(localStorage.getItem("roadmapProgress") || "{}");
+}
+
+function saveProgress(progress){
+    localStorage.setItem("roadmapProgress",JSON.stringify(progress));
+}
+
+let profile = loadProfile();
+let roadmapProgress = loadProgress();
+
+let selectedCareer = null;
+let recommendations = [];
+
+if(profile){
+    recommendations = calculateRecommendations(profile);
+    selectedCareer = careers.find(c=>c.id===profile.selectedCareer) || recommendations[0];
+}
+
+/* =========================================================
+   RECOMMENDATION ENGINE
+========================================================= */
+
+function calculateRecommendations(p){
+
+    let score = {};
+
+    careers.forEach(c=>score[c.id]=0);
+
+    p.interests.forEach(i=>{
+        careers.forEach(c=>{
+            if(c.interests.includes(i)){
+                score[c.id]+=3;
+            }
+        });
+    });
+
+    p.skills.forEach(s=>{
+        careers.forEach(c=>{
+            if(c.skills.includes(s)){
+                score[c.id]+=2;
+            }
+        });
+    });
+
+    p.goals.forEach(g=>{
+        careers.forEach(c=>{
+            if(c.goals.includes(g)){
+                score[c.id]+=6;
+            }
+        });
+    });
+
+    let max=Math.max(...Object.values(score),1);
+
+    return careers
+        .map(c=>({
+            ...c,
+            score:score[c.id],
+            match:Math.min(98,Math.round(48+(score[c.id]/max)*50))
+        }))
+        .sort((a,b)=>b.score-a.score)
+        .slice(0,3);
+}
+
+/* =========================================================
+   APP ROUTING
+========================================================= */
+
+let currentPage = profile ? "dashboard" : "landing";
+
+function navigate(page){
+    currentPage=page;
+    render();
+    window.scrollTo(0,0);
+}
+
+/* =========================================================
+   LANDING
+========================================================= */
+
+function landingPage(){
+
+return `
+
+<div class="min-h-screen">
+
+<header class="flex justify-between items-center max-w-7xl mx-auto px-5 py-5">
+
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-yellow-300 text-black flex items-center justify-center font-black">
+CG
+</div>
+
+<div>
+<div class="font-black">
+CareerGuide <span class="text-yellow-300">AI</span>
+</div>
+
+<div class="text-xs text-slate-500">
+CAREER INTELLIGENCE
+</div>
+</div>
+</div>
+
+<button onclick="navigate('assessment')"
+class="border border-white/10 px-4 py-2 rounded-xl text-sm">
+Get Started
+</button>
+
+</header>
+
+
+<section class="max-w-7xl mx-auto px-5 pt-20 pb-24">
+
+<div class="grid lg:grid-cols-2 gap-14 items-center">
+
+<div>
+
+<div class="inline-block px-3 py-2 rounded-full bg-yellow-300/10 text-yellow-200 text-xs font-bold mb-6">
+✨ AI-POWERED CAREER GUIDANCE
+</div>
+
+<h1 class="text-5xl md:text-7xl font-black leading-tight">
+Find the
+<span class="gradient-text">
+Career
+</span>
+That's Right for You
+</h1>
+
+<p class="text-slate-400 text-lg mt-6 max-w-xl leading-8">
+AI-powered career guidance personalized to your interests, skills and goals.
+</p>
+
+<div class="flex flex-col sm:flex-row gap-3 mt-8">
+
+<button onclick="navigate('assessment')"
+class="bg-yellow-300 text-black px-6 py-4 rounded-xl font-black">
+Start Career Assessment →
+</button>
+
+<button onclick="demoProfile()"
+class="border border-white/10 bg-white/5 px-6 py-4 rounded-xl font-bold">
+Try Demo Profile
+</button>
+
+</div>
+
+<p class="text-xs text-slate-500 mt-4">
+AI guidance is educational and is not scientifically or professionally validated.
+</p>
+
+</div>
+
+
+<div class="glass rounded-3xl p-7">
+
+<div class="flex justify-between mb-7">
+<div>
+<div class="text-xs text-slate-500 font-bold">
+CAREER INTELLIGENCE
+</div>
+<div class="font-bold mt-1">
+Your path, visualized
+</div>
+</div>
+
+<span class="text-xs text-emerald-300">
+● Live Demo
+</span>
+</div>
+
+${[
+"Assessment",
+"AI Analysis",
+"Career Match",
+"Skill Gap",
+"Roadmap"
+].map((x,i)=>`
+
+<div class="flex items-center gap-4 mb-5">
+
+<div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-300 flex items-center justify-center font-black">
+${i+1}
+</div>
+
+<div class="flex-1">
+<div class="font-bold text-sm">${x}</div>
+
+<div class="progress mt-2">
+<div style="width:${45+i*10}%"></div>
+</div>
+</div>
+
+<span class="text-green-400">✓</span>
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+
+<div class="mt-24">
+
+<h2 class="text-3xl font-black mb-8">
+Everything you need to build your career path.
+</h2>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+${[
+["🤖","AI Career Matching","Find careers based on your interests, skills and goals."],
+["📊","Skill Gap Analysis","Discover what you know and what you need next."],
+["🗺️","Personalized Roadmaps","Follow a practical phase-by-phase learning plan."],
+["🚀","Project Recommendations","Build projects that strengthen your portfolio."]
+].map(x=>`
+
+<div class="glass rounded-2xl p-6">
+
+<div class="text-3xl mb-5">${x[0]}</div>
+
+<h3 class="font-bold">${x[1]}</h3>
+
+<p class="text-sm text-slate-400 mt-2 leading-6">
+${x[2]}
+</p>
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="border-t border-white/10 text-center text-xs text-slate-500 py-8">
+© 2026 CareerGuide AI · Hackathon Prototype
+</footer>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   ASSESSMENT
+========================================================= */
+
+let assessmentStep=0;
+
+let formData={
+    name:"",
+    education:"B.Tech",
+    year:"2nd Year",
+    interests:[],
+    skills:[],
+    goals:[],
+    learningTime:"8–12 hours"
+};
+
+function assessmentPage(){
+
+let titles=[
+"Tell us about your education",
+"What is your current year / level?",
+"What are you interested in?",
+"What skills do you currently have?",
+"What is your career goal?",
+"How much time can you spend learning every week?"
+];
+
+let content="";
+
+if(assessmentStep===0){
+
+content=`
+
+<input id="nameInput"
+value="${formData.name}"
+placeholder="Your name"
+class="w-full bg-white/5 border border-white/10 rounded-xl p-4 mb-5 outline-none">
+
+<div class="grid sm:grid-cols-2 gap-3">
+
+${["School","Diploma","B.Tech","BCA","B.Sc","Other"].map(x=>`
+
+<div onclick="selectSingle('education','${x}')"
+class="option ${formData.education===x?'active':''}">
+${x}
+</div>
+
+`).join("")}
+
+</div>
+
+`;
+
+}
+
+else if(assessmentStep===1){
+
+content=choiceOptions(
+["1st Year","2nd Year","3rd Year","4th Year","Final Year","Graduate","Working / Other"],
+"year"
+);
+
+}
+
+else if(assessmentStep===2){
+
+content=multiOptions(INTERESTS,"interests");
+
+}
+
+else if(assessmentStep===3){
+
+content=multiOptions(SKILLS,"skills");
+
+}
+
+else if(assessmentStep===4){
+
+content=multiOptions(GOALS,"goals");
+
+}
+
+else {
+
+content=choiceOptions(
+["1–3 hours","4–7 hours","8–12 hours","12+ hours"],
+"learningTime"
+);
+
+}
+
+return `
+
+<div class="min-h-screen p-5">
+
+<div class="max-w-3xl mx-auto">
+
+<div class="flex justify-between mb-8">
+
+<button onclick="navigate('${profile?'dashboard':'landing'}')"
+class="text-sm text-slate-400">
+← Back
+</button>
+
+<span class="text-sm font-bold">
+CareerGuide <span class="text-yellow-300">AI</span>
+</span>
+
+</div>
+
+<div class="mb-8">
+
+<div class="flex justify-between text-xs text-slate-500 mb-2">
+<span>Step ${assessmentStep+1} of 6</span>
+<span>${Math.round(((assessmentStep+1)/6)*100)}%</span>
+</div>
+
+<div class="progress">
+<div style="width:${((assessmentStep+1)/6)*100}%"></div>
+</div>
+
+</div>
+
+
+<div class="glass rounded-3xl p-7 md:p-10 fade">
+
+<h1 class="text-3xl font-black mb-2">
+${titles[assessmentStep]}
+</h1>
+
+<p class="text-sm text-slate-400 mb-8">
+Select the options that best describe you.
+</p>
+
+${content}
+
+<div class="flex justify-between mt-10 pt-6 border-t border-white/10">
+
+<button
+onclick="previousStep()"
+${assessmentStep===0?'disabled':''}
+class="border border-white/10 px-5 py-3 rounded-xl disabled:opacity-30">
+← Back
+</button>
+
+<button
+onclick="nextStep()"
+class="bg-yellow-300 text-black px-5 py-3 rounded-xl font-black">
+${assessmentStep===5?"Generate My Career Report":"Next →"}
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function choiceOptions(arr,key){
+
+return `<div class="space-y-3">
+
+${arr.map(x=>`
+
+<div
+onclick="selectSingle('${key}','${x}')"
+class="option ${formData[key]===x?'active':''}">
+${x}
+${formData[key]===x?" ✓":""}
+</div>
+
+`).join("")}
+
+</div>`;
+
+}
+
+function multiOptions(arr,key){
+
+return `<div class="grid sm:grid-cols-2 gap-3">
+
+${arr.map(x=>`
+
+<div
+onclick="toggleOption('${key}','${x}')"
+class="option ${formData[key].includes(x)?'active':''}">
+${x}
+${formData[key].includes(x)?" ✓":""}
+</div>
+
+`).join("")}
+
+</div>`;
+
+}
+
+function selectSingle(key,value){
+
+if(key==="name") return;
+
+formData[key]=value;
+
+render();
+}
+
+function toggleOption(key,value){
+
+if(formData[key].includes(value)){
+    formData[key]=formData[key].filter(x=>x!==value);
+}else{
+    formData[key].push(value);
+}
+
+render();
+}
+
+function nextStep(){
+
+if(assessmentStep===0){
+
+let n=document.getElementById("nameInput").value.trim();
+
+if(!n){
+    alert("Please enter your name.");
+    return;
+}
+
+formData.name=n;
+
+}
+
+if(assessmentStep===2 && formData.interests.length===0){
+    alert("Please select at least one interest.");
+    return;
+}
+
+if(assessmentStep===3 && formData.skills.length===0){
+    alert("Please select at least one skill.");
+    return;
+}
+
+if(assessmentStep===4 && formData.goals.length===0){
+    alert("Please select at least one career goal.");
+    return;
+}
+
+if(assessmentStep<5){
+
+assessmentStep++;
+render();
+
+}else{
+
+generateReport();
+
+}
+
+}
+
+function previousStep(){
+
+if(assessmentStep>0){
+
+assessmentStep--;
+render();
+
+}
+
+}
+
+/* =========================================================
+   REPORT
+========================================================= */
+
+function generateReport(){
+
+recommendations=calculateRecommendations(formData);
+
+selectedCareer=recommendations[0];
+
+profile={
+    ...formData,
+    recommendedCareers:recommendations.map(x=>({
+        id:x.id,
+        name:x.name,
+        match:x.match
+    })),
+    selectedCareer:selectedCareer.id
+};
+
+saveProfile(profile);
+
+navigate("careers");
+
+}
+
+function careerCard(c,index){
+
+let label=c.match>=85?"High Match":c.match>=70?"Strong Match":"Good Match";
+
+return `
+
+<div class="glass rounded-2xl p-6 hover:-translate-y-1 transition">
+
+<div class="flex justify-between items-start">
+
+<div class="flex gap-3">
+
+<div class="text-3xl">
+${c.icon}
+</div>
+
+<div>
+
+<div class="text-xs text-slate-500">
+#${index+1}
+</div>
+
+<h3 class="font-black">
+${c.name}
+</h3>
+
+</div>
+
+</div>
+
+<div class="text-right bg-yellow-300/10 px-3 py-2 rounded-xl">
+
+<div class="text-xl font-black text-yellow-200">
+${c.match}%
+</div>
+
+<div class="text-[9px] text-yellow-300">
+${label}
+</div>
+
+</div>
+
+</div>
+
+<p class="text-sm text-slate-400 mt-5">
+${c.description || "A career path matched to your current profile."}
+</p>
+
+<div class="mt-5">
+
+<div class="text-xs text-slate-500 font-bold mb-2">
+WHY IT MATCHES
+</div>
+
+<div class="flex flex-wrap gap-2">
+
+${c.interests.slice(0,4).map(x=>
+`<span class="text-xs bg-white/5 px-2 py-1 rounded-lg">${x}</span>`
+).join("")}
+
+</div>
+
+</div>
+
+<div class="mt-5">
+
+<div class="text-xs text-slate-500 font-bold mb-2">
+REQUIRED SKILLS
+</div>
+
+<div class="space-y-1 text-xs text-slate-300">
+
+${c.skills.slice(0,5).map(x=>
+`<div>✓ ${x}</div>`
+).join("")}
+
+</div>
+
+</div>
+
+<div class="flex gap-2 mt-6">
+
+<button onclick="selectCareer('${c.id}','skillgap')"
+class="flex-1 border border-white/10 rounded-xl py-3 text-xs font-bold">
+View Skill Gap
+</button>
+
+<button onclick="selectCareer('${c.id}','roadmap')"
+class="bg-yellow-300 text-black rounded-xl px-4 py-3 text-xs font-black">
+Roadmap
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   CAREERS
+========================================================= */
+
+function careersPage(){
+
+if(!recommendations.length){
+
+return emptyPage(
+"Complete your assessment",
+"Your personalized career matches will appear here.",
+"assessment"
+);
+
+}
+
+return `
+
+<div class="space-y-7">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+✨ AI CAREER REPORT
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+Your Career Analysis
+</h1>
+
+<p class="text-sm text-slate-400 mt-3 max-w-2xl">
+These are AI-generated guidance suggestions based on the information you provided.
+They are not scientifically or professionally validated career assessments.
+</p>
+
+</div>
+
+<div class="grid xl:grid-cols-3 gap-5">
+
+${recommendations.map((c,i)=>careerCard(c,i)).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   SKILL GAP
+========================================================= */
+
+function skillGapPage(){
+
+if(!selectedCareer){
+
+return emptyPage(
+"Select a career",
+"Choose a career from Career Matches first.",
+"careers"
+);
+
+}
+
+let current=profile?.skills||[];
+
+let gaps=selectedCareer.skills.map(s=>({
+
+skill:s,
+strong:current.includes(s),
+level:current.includes(s)?90:10
+
+}));
+
+let missing=gaps.filter(x=>!x.strong);
+
+return `
+
+<div class="space-y-7">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+📊 SKILL INTELLIGENCE
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+Your Skill Gap
+</h1>
+
+<p class="text-sm text-slate-400 mt-2">
+Target career:
+<span class="text-white font-bold">
+${selectedCareer.name}
+</span>
+</p>
+
+</div>
+
+
+<div class="grid lg:grid-cols-2 gap-5">
+
+<div class="glass rounded-2xl p-6">
+
+<h2 class="font-black">
+CURRENT SKILLS vs REQUIRED SKILLS
+</h2>
+
+<div class="mt-7 space-y-5">
+
+${gaps.map(g=>`
+
+<div>
+
+<div class="flex justify-between text-xs mb-2">
+
+<span class="font-bold">
+${g.skill}
+</span>
+
+<span class="${g.strong?'text-emerald-300':'text-slate-500'}">
+${g.strong?'Strong':'Not Started'}
+</span>
+
+</div>
+
+<div class="progress">
+
+<div style="width:${g.level}%"></div>
+
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+
+<div class="glass rounded-2xl p-6">
+
+<h2 class="font-black">
+Recommended Next Skills
+</h2>
+
+<div class="mt-5 space-y-3">
+
+${missing.slice(0,5).map((x,i)=>`
+
+<div class="bg-white/5 border border-white/5 rounded-xl p-4">
+
+<div class="flex gap-3">
+
+<div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-300 flex items-center justify-center">
+${i+1}
+</div>
+
+<div>
+
+<div class="font-bold">
+${x.skill}
+</div>
+
+<p class="text-xs text-slate-400 mt-1">
+This skill is important for ${selectedCareer.name}
+and helps you progress toward practical projects.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+<button onclick="navigate('roadmap')"
+class="w-full bg-yellow-300 text-black rounded-xl py-3 mt-6 font-black">
+Open Personalized Roadmap →
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   ROADMAP
+========================================================= */
+
+function roadmapPage(){
+
+if(!selectedCareer){
+
+return emptyPage(
+"No roadmap selected",
+"Choose a career first.",
+"careers"
+);
+
+}
+
+let roadmap=selectedCareer.roadmap;
+
+let completed=roadmap.filter((x,i)=>
+roadmapProgress[selectedCareer.id+"-"+i]
+).length;
+
+let percent=Math.round(completed/roadmap.length*100);
+
+return `
+
+<div class="space-y-7">
+
+<div>
+
+<div class="flex justify-between">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+🗺️ PERSONALIZED ROADMAP
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+${selectedCareer.name}
+</h1>
+
+</div>
+
+<div class="text-right">
+
+<div class="text-3xl font-black text-yellow-300">
+${percent}%
+</div>
+
+<div class="text-xs text-slate-500">
+ROADMAP PROGRESS
+</div>
+
+</div>
+
+</div>
+
+<div class="progress mt-5">
+<div style="width:${percent}%"></div>
+</div>
+
+</div>
+
+
+<div class="space-y-4">
+
+${roadmap.map((p,i)=>{
+
+let done=roadmapProgress[selectedCareer.id+"-"+i];
+
+return `
+
+<div class="glass rounded-2xl p-6">
+
+<div class="flex gap-4">
+
+<button onclick="togglePhase('${selectedCareer.id}',${i})"
+class="text-2xl">
+
+${done?"✅":"⭕"}
+
+</button>
+
+<div class="flex-1">
+
+<div class="flex flex-wrap gap-2">
+
+<span class="text-xs bg-purple-500/10 text-purple-300 px-2 py-1 rounded-lg">
+PHASE ${i+1}
+</span>
+
+<span class="text-xs text-slate-500">
+⏱ ${p[2]}
+</span>
+
+</div>
+
+<h2 class="text-xl font-black mt-3 ${done?'line-through text-slate-500':''}">
+${p[0]}
+</h2>
+
+<div class="flex flex-wrap gap-2 mt-3">
+
+${p[1].map(s=>
+`<span class="text-xs bg-white/5 px-2 py-1 rounded-lg">${s}</span>`
+).join("")}
+
+</div>
+
+<p class="text-sm text-slate-400 mt-4">
+<b class="text-white">Learning Objective:</b>
+${p[3]}
+</p>
+
+<p class="text-sm text-slate-400 mt-2">
+<b class="text-white">Project Idea:</b>
+${p[4]}
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function togglePhase(id,index){
+
+let key=id+"-"+index;
+
+roadmapProgress[key]=!roadmapProgress[key];
+
+saveProgress(roadmapProgress);
+
+render();
+
+}
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+function projectsPage(){
+
+if(!selectedCareer){
+
+return emptyPage(
+"No projects yet",
+"Complete the assessment first.",
+"assessment"
+);
+
+}
+
+return `
+
+<div class="space-y-7">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+🚀 PORTFOLIO BUILDER
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+Project Recommendations
+</h1>
+
+<p class="text-sm text-slate-400 mt-2">
+Projects for ${selectedCareer.name}
+</p>
+
+</div>
+
+<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+
+${selectedCareer.projects.map((p,i)=>`
+
+<div class="glass rounded-2xl p-6">
+
+<span class="text-xs bg-white/5 px-2 py-1 rounded-lg">
+${i===0?"Beginner":i===1?"Intermediate":"Advanced"}
+</span>
+
+<div class="text-3xl mt-5">
+${selectedCareer.icon}
+</div>
+
+<h3 class="font-black text-lg mt-3">
+${p}
+</h3>
+
+<p class="text-sm text-slate-400 mt-3 leading-6">
+Build a practical portfolio project demonstrating
+important skills for ${selectedCareer.name}.
+</p>
+
+<div class="flex flex-wrap gap-2 mt-4">
+
+${selectedCareer.skills.slice(0,3).map(s=>
+`<span class="text-xs bg-purple-500/10 text-purple-200 px-2 py-1 rounded-lg">${s}</span>`
+).join("")}
+
+</div>
+
+<button onclick="startProject('${p}')"
+class="w-full bg-white/5 hover:bg-white/10 rounded-xl py-3 mt-6 text-sm font-bold">
+Start Project
+</button>
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function startProject(name){
+
+alert(
+`Project Added!
+
+${name}
+
+Next steps:
+1. Create a GitHub repository
+2. Write project objectives
+3. Build the MVP
+4. Document your work
+5. Add it to your resume`
+);
+
+}
+
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
+
+let chatMessages=JSON.parse(
+localStorage.getItem("careerChat")||"[]"
+);
+
+function assistantPage(){
+
+return `
+
+<div class="max-w-4xl mx-auto space-y-6">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+✨ PERSONALIZED AI
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+Career Assistant 🤖
+</h1>
+
+<p class="text-sm text-slate-400 mt-2">
+Ask questions about careers, skills, projects and internships.
+</p>
+
+</div>
+
+
+<div class="glass rounded-3xl overflow-hidden">
+
+<div class="border-b border-white/10 p-5">
+
+<div class="font-bold">
+CareerGuide AI
+</div>
+
+<div class="text-xs text-emerald-300">
+● Demo assistant online
+</div>
+
+</div>
+
+
+<div id="chatBox"
+class="p-5 h-[430px] overflow-y-auto space-y-4">
+
+${chatMessages.length===0?`
+
+<div class="text-center py-16">
+
+<div class="text-5xl">
+🤖
+</div>
+
+<h2 class="font-black text-xl mt-4">
+What can I help you figure out?
+</h2>
+
+<p class="text-sm text-slate-500 mt-2">
+Try a question below.
+</p>
+
+<div class="grid sm:grid-cols-2 gap-2 mt-6">
+
+${[
+"What should I learn next?",
+"Can I become an AI engineer?",
+"What projects should I build?",
+"How should I prepare for internships?"
+].map(q=>`
+
+<button onclick="sendChat('${q}')"
+class="bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-left">
+${q}
+</button>
+
+`).join("")}
+
+</div>
+
+</div>
+
+`:""}
+
+${chatMessages.map(m=>`
+
+<div class="flex ${m.role==="user"?"justify-end":""}">
+
+<div class="max-w-[80%] rounded-2xl px-4 py-3 text-sm
+${m.role==="user"?"bg-purple-500/20":"bg-white/5"}">
+
+${m.text}
+
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+
+<form onsubmit="event.preventDefault();sendChat()"
+class="border-t border-white/10 p-4 flex gap-2">
+
+<input
+id="chatInput"
+placeholder="Ask about your career..."
+class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none">
+
+<button
+class="bg-yellow-300 text-black rounded-xl px-5 font-black">
+Send
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function sendChat(question){
+
+let input=document.getElementById("chatInput");
+
+let text=question || input?.value;
+
+if(!text || !text.trim()) return;
+
+text=text.trim();
+
+chatMessages.push({
+role:"user",
+text:text
+});
+
+let reply=getAIResponse(text);
+
+chatMessages.push({
+role:"assistant",
+text:reply
+});
+
+localStorage.setItem(
+"careerChat",
+JSON.stringify(chatMessages)
+);
+
+render();
+
+setTimeout(()=>{
+
+let box=document.getElementById("chatBox");
+
+if(box) box.scrollTop=box.scrollHeight;
+
+},50);
+
+}
+
+function getAIResponse(q){
+
+q=q.toLowerCase();
+
+let careerName=selectedCareer?.name || "your target career";
+
+if(q.includes("next") || q.includes("learn")){
+
+let nextSkill=selectedCareer?.roadmap?.[0]?.[1]?.[0] || "programming fundamentals";
+
+return `Based on your profile, I recommend learning <b>${nextSkill}</b> next. After that, build a small project and then move to the next roadmap phase.`;
+
+}
+
+if(q.includes("project")){
+
+let project=selectedCareer?.projects?.[0] || "a portfolio project";
+
+return `For ${careerName}, a good starting project is <b>${project}</b>. Keep it small, document your learning, and publish the final result on GitHub.`;
+
+}
+
+if(q.includes("intern")){
+
+return `For internships, focus on three things: <b>2–3 good projects, strong fundamentals and a clear resume</b>. Keep your GitHub updated and practice interview questions regularly.`;
+
+}
+
+if(q.includes("ai engineer") || q.includes("become")){
+
+return `Yes. You can work toward ${careerName}. Your current profile is only a starting point. Focus on the missing skills, complete projects and keep improving consistently.`;
+
+}
+
+if(q.includes("skill")){
+
+return `Your selected path is <b>${careerName}</b>. Start with the missing foundational skills shown in Skill Gap, then move into projects and deployment.`;
+
+}
+
+return `I can help you with career choices, learning plans, skill gaps, projects, internships and interview preparation. Based on your profile, I recommend focusing on <b>${careerName}</b>.`;
+
+}
+
+/* =========================================================
+   COMPARE
+========================================================= */
+
+function comparePage(){
+
+let a=careers.find(c=>c.id==="aiml");
+
+let b=careers.find(c=>c.id==="software");
+
+return `
+
+<div class="space-y-7">
+
+<div>
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+⚖ CAREER DECISION TOOL
+</div>
+
+<h1 class="text-4xl font-black mt-2">
+Compare Careers
+</h1>
+
+<p class="text-sm text-slate-400 mt-2">
+Compare two career paths based on your profile.
+</p>
+
+</div>
+
+
+<div class="glass rounded-2xl p-5">
+
+<div class="grid md:grid-cols-2 gap-4">
+
+<div>
+
+<label class="text-xs text-slate-500">
+CAREER A
+</label>
+
+<select id="careerA"
+onchange="renderComparison()"
+class="w-full mt-2 bg-slate-900 border border-white/10 rounded-xl p-3">
+
+${careers.map(c=>
+`<option value="${c.id}" ${c.id==="aiml"?"selected":""}>
+${c.name}
+</option>`
+).join("")}
+
+</select>
+
+</div>
+
+
+<div>
+
+<label class="text-xs text-slate-500">
+CAREER B
+</label>
+
+<select id="careerB"
+onchange="renderComparison()"
+class="w-full mt-2 bg-slate-900 border border-white/10 rounded-xl p-3">
+
+${careers.map(c=>
+`<option value="${c.id}" ${c.id==="software"?"selected":""}>
+${c.name}
+</option>`
+).join("")}
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="comparisonTable"></div>
+
+</div>
+
+`;
+
+}
+
+function renderComparison(){
+
+let a=document.getElementById("careerA")?.value||"aiml";
+let b=document.getElementById("careerB")?.value||"software";
+
+let ca=careers.find(c=>c.id===a);
+let cb=careers.find(c=>c.id===b);
+
+let html=`
+
+<div class="glass rounded-2xl overflow-hidden">
+
+<div class="grid grid-cols-3 bg-white/5">
+
+<div class="p-5 text-xs text-slate-500">
+DIMENSION
+</div>
+
+<div class="p-5 text-center font-black">
+${ca.icon} ${ca.name}
+</div>
+
+<div class="p-5 text-center font-black">
+${cb.icon} ${cb.name}
+</div>
+
+</div>
+
+
+${comparisonRow(
+"Required Skills",
+ca.skills.join(", "),
+cb.skills.join(", ")
+)}
+
+${comparisonRow(
+"Learning Difficulty",
+ca.difficulty,
+cb.difficulty
+)}
+
+${comparisonRow(
+"Typical Projects",
+ca.projects.slice(0,2).join(" • "),
+cb.projects.slice(0,2).join(" • ")
+)}
+
+${comparisonRow(
+"Roadmap Length",
+ca.roadmap.length+" phases",
+cb.roadmap.length+" phases"
+)}
+
+${comparisonRow(
+"Recommended Next Step",
+ca.roadmap[0][0],
+cb.roadmap[0][0]
+)}
+
+</div>
+
+`;
+
+document.getElementById("comparisonTable").innerHTML=html;
+
+}
+
+function comparisonRow(title,a,b){
+
+return `
+
+<div class="grid grid-cols-3 border-t border-white/10">
+
+<div class="p-5 text-xs font-bold text-slate-500">
+${title}
+</div>
+
+<div class="p-5 text-xs text-center text-slate-300">
+${a}
+</div>
+
+<div class="p-5 text-xs text-center text-slate-300">
+${b}
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function dashboardPage(){
+
+if(!profile){
+
+return emptyPage(
+"Welcome to CareerGuide AI",
+"Complete the assessment to generate your personalized dashboard.",
+"assessment"
+);
+
+}
+
+let career=selectedCareer;
+
+let completed=career?
+career.roadmap.filter((x,i)=>
+roadmapProgress[career.id+"-"+i]
+).length:0;
+
+let percent=career?
+Math.round(completed/career.roadmap.length*100):0;
+
+return `
+
+<div class="space-y-7">
+
+<div class="glass rounded-3xl p-7">
+
+<div class="text-xs text-yellow-300 font-bold uppercase tracking-widest">
+✨ STUDENT DASHBOARD
+</div>
+
+<h1 class="text-4xl font-black mt-3">
+Welcome back, ${profile.name} 👋
+</h1>
+
+<p class="text-sm text-slate-400 mt-2">
+${profile.education} · ${profile.year} · ${profile.learningTime}/week
+</p>
+
+</div>
+
+
+<div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+${statCard(
+"🎯",
+"Top Career Match",
+recommendations[0]?.match+"%",
+recommendations[0]?.name
+)}
+
+${statCard(
+"📊",
+"Skills to Strengthen",
+career?career.skills.filter(x=>!profile.skills.includes(x)).length:"—",
+"Based on target career"
+)}
+
+${statCard(
+"🗺️",
+"Roadmap Progress",
+percent+"%",
+career?.name||"Select a career"
+)}
+
+${statCard(
+"🚀",
+"Recommended Projects",
+career?.projects.length||"—",
+"Portfolio opportunities"
+)}
+
+</div>
+
+
+<div class="grid lg:grid-cols-2 gap-5">
+
+<div>
+
+<h2 class="font-black mb-4">
+Top Career Recommendation
+</h2>
+
+${recommendations[0]?
+careerCard(recommendations[0],1):
+""}
+
+</div>
+
+
+<div>
+
+<h2 class="font-black mb-4">
+Quick Actions
+</h2>
+
+<div class="space-y-3">
+
+${[
+["🤖","Ask Career Assistant","assistant"],
+["🗺️","Continue Roadmap","roadmap"],
+["🚀","Explore Projects","projects"],
+["⚖️","Compare Careers","compare"]
+].map(x=>`
+
+<button onclick="navigate('${x[2]}')"
+class="glass w-full rounded-2xl p-5 flex items-center gap-4 text-left">
+
+<div class="text-2xl">
+${x[0]}
+</div>
+
+<div class="flex-1">
+
+<div class="font-bold">
+${x[1]}
+</div>
+
+<div class="text-xs text-slate-500">
+Open workspace →
+</div>
+
+</div>
+
+</button>
+
+`).join("")}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function statCard(icon,label,value,hint){
+
+return `
+
+<div class="glass rounded-2xl p-5">
+
+<div class="text-2xl mb-5">
+${icon}
+</div>
+
+<div class="text-2xl font-black">
+${value}
+</div>
+
+<div class="text-xs text-slate-400 mt-1">
+${label}
+</div>
+
+<div class="text-xs text-slate-500 mt-3">
+${hint}
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function sidebar(){
+
+let items=[
+["dashboard","Dashboard","⌂"],
+["assessment","Assessment","📝"],
+["careers","Career Matches","✨"],
+["skillgap","Skill Gap","📊"],
+["roadmap","Roadmap","🗺️"],
+["projects","Projects","🚀"],
+["assistant","AI Assistant","🤖"],
+["compare","Compare Careers","⚖️"]
+];
+
+return `
+
+<aside class="hidden lg:flex fixed left-0 top-0 bottom-0 w-72 bg-[#090d1b] border-r border-white/10 p-5 flex-col z-30">
+
+<div class="flex items-center gap-3 mb-10">
+
+<div class="w-10 h-10 rounded-xl bg-yellow-300 text-black flex items-center justify-center font-black">
+CG
+</div>
+
+<div class="font-black">
+CareerGuide <span class="text-yellow-300">AI</span>
+</div>
+
+</div>
+
+
+<div class="text-xs text-slate-600 font-bold uppercase mb-3 px-2">
+Workspace
+</div>
+
+
+<nav class="space-y-1">
+
+${items.map(x=>`
+
+<button onclick="navigate('${x[0]}')"
+class="w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold
+${currentPage===x[0]?
+"bg-yellow-300/10 text-yellow-200":
+"text-slate-400 hover:bg-white/5"}">
+
+<span>
+${x[2]}
+</span>
+
+${x[1]}
+
+</button>
+
+`).join("")}
+
+</nav>
+
+
+<div class="mt-auto bg-yellow-300/5 border border-yellow-300/10 rounded-2xl p-4">
+
+<div class="text-xs font-bold text-yellow-200">
+AI GUIDANCE NOTE
+</div>
+
+<p class="text-xs text-slate-500 mt-2 leading-5">
+Recommendations are educational guidance suggestions and are not scientifically or professionally validated.
+</p>
+
+</div>
+
+</aside>
+
+`;
+
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+function topbar(){
+
+return `
+
+<header class="sticky top-0 z-20 h-16 bg-[#070b17]/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-4 md:px-8">
+
+<button onclick="toggleMobile()"
+class="lg:hidden text-xl">
+☰
+</button>
+
+<div class="hidden lg:block text-sm text-slate-500">
+Personalized career workspace
+</div>
+
+<div class="flex items-center gap-3 ml-auto">
+
+<button onclick="navigate('assistant')"
+class="hidden sm:block border border-white/10 px-3 py-2 rounded-xl text-xs">
+✨ Ask AI
+</button>
+
+<div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center font-black">
+${profile?.name?.charAt(0)||"D"}
+</div>
+
+</div>
+
+</header>
+
+`;
+
+}
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function mobileMenu(){
+
+return `
+
+<div id="mobileMenu"
+class="hidden fixed inset-0 z-50 bg-black/70">
+
+<div class="w-72 h-full bg-[#090d1b] p-5">
+
+<div class="flex justify-between mb-8">
+
+<div class="font-black">
+CareerGuide <span class="text-yellow-300">AI</span>
+</div>
+
+<button onclick="toggleMobile()">
+✕
+</button>
+
+</div>
+
+${[
+["dashboard","Dashboard"],
+["assessment","Assessment"],
+["careers","Career Matches"],
+["skillgap","Skill Gap"],
+["roadmap","Roadmap"],
+["projects","Projects"],
+["assistant","AI Assistant"],
+["compare","Compare Careers"]
+].map(x=>`
+
+<button onclick="navigate('${x[0]}');toggleMobile()"
+class="block w-full text-left p-3 rounded-xl text-sm font-bold text-slate-300 hover:bg-white/5">
+${x[1]}
+</button>
+
+`).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function toggleMobile(){
+
+document.getElementById("mobileMenu")
+.classList.toggle("hidden");
+
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+function emptyPage(title,text,button){
+
+return `
+
+<div class="glass rounded-2xl p-12 text-center">
+
+<div class="text-5xl">
+✨
+</div>
+
+<h2 class="text-2xl font-black mt-5">
+${title}
+</h2>
+
+<p class="text-sm text-slate-400 mt-2">
+${text}
+</p>
+
+<button onclick="navigate('${button}')"
+class="bg-yellow-300 text-black px-5 py-3 rounded-xl font-black mt-6">
+Get Started →
+</button>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   DEMO PROFILE
+========================================================= */
+
+function demoProfile(){
+
+formData={
+name:"Demo Student",
+education:"B.Tech",
+year:"2nd Year",
+interests:[
+"Artificial Intelligence",
+"Coding",
+"Problem Solving"
+],
+skills:[
+"Python",
+"C/C++"
+],
+goals:[
+"AI/ML"
+],
+learningTime:"8–12 hours"
+};
+
+recommendations=calculateRecommendations(formData);
+
+selectedCareer=recommendations[0];
+
+profile={
+...formData,
+recommendedCareers:recommendations,
+selectedCareer:selectedCareer.id
+};
+
+saveProfile(profile);
+
+navigate("careers");
+
+}
+
+/* =========================================================
+   MAIN RENDER
+========================================================= */
+
+function render(){
+
+if(currentPage==="landing"){
+
+document.getElementById("app").innerHTML=
+landingPage();
+
+return;
+
+}
+
+let content="";
+
+switch(currentPage){
+
+case"dashboard":
+content=dashboardPage();
+break;
+
+case"assessment":
+content=assessmentPage();
+break;
+
+case"careers":
+content=careersPage();
+break;
+
+case"skillgap":
+content=skillGapPage();
+break;
+
+case"roadmap":
+content=roadmapPage();
+break;
+
+case"projects":
+content=projectsPage();
+break;
+
+case"assistant":
+content=assistantPage();
+break;
+
+case"compare":
+content=comparePage();
+break;
+
+default:
+content=dashboardPage();
+
+}
+
+document.getElementById("app").innerHTML=`
+
+${sidebar()}
+
+<div class="lg:pl-72 min-h-screen">
+
+${topbar()}
+
+${mobileMenu()}
+
+<main class="max-w-[1500px] mx-auto p-4 md:p-8 fade">
+
+${content}
+
+</main>
+
+<footer class="border-t border-white/10 text-center py-6 text-xs text-slate-600">
+
+CareerGuide AI · Hackathon MVP ·
+<button onclick="resetData()" class="text-slate-500 hover:text-white">
+Reset Local Data
+</button>
+
+</footer>
+
+</div>
+
+`;
+
+if(currentPage==="compare"){
+
+setTimeout(renderComparison,10);
+
+}
+
+}
+
+/* =========================================================
+   CAREER SELECT
+========================================================= */
+
+function selectCareer(id,page){
+
+selectedCareer=careers.find(c=>c.id===id);
+
+if(profile){
+
+profile.selectedCareer=id;
+
+saveProfile(profile);
+
+}
+
+navigate(page);
+
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetData(){
+
+if(confirm("Reset all CareerGuide AI data?")){
+
+localStorage.clear();
+
+profile=null;
+recommendations=[];
+selectedCareer=null;
+roadmapProgress={};
+chatMessages=[];
+
+currentPage="landing";
+
+render();
+
+}
+
+}
+
+/* =========================================================
+   START
+========================================================= */
+
+render();
+
+</script>
+
+</body>
+</html>
+```
